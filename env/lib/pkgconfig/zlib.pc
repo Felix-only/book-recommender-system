@@ -1,0 +1,13 @@
+prefix=/Users/bellal/book-recommender-system/env
+exec_prefix=/Users/bellal/book-recommender-system/env
+libdir=/Users/bellal/book-recommender-system/env/lib
+sharedlibdir=/Users/bellal/book-recommender-system/env/lib
+includedir=/Users/bellal/book-recommender-system/env/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
