@@ -1,6 +1,9 @@
 streamlit
 numpy
 scikit-learn
+matplotlib.pyplot
+pandas
+seaborn
 
 # local packages
 -e . 
