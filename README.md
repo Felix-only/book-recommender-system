@@ -1,9 +1,14 @@
-# book-recommender-system
+# Book Recommender System
 
+## Create a conda virtual environment
+Please run following commands in order in your terminal:
+```bash
+  $ conda create --prefix ./env python==3.7.1 -y
+```
+```bash
+  $ conda activate ./env/
+```
+```bash
+  $ pip install -r requirement.txt
+```
 ## data preprocessing & model generating
-
-## create conda environment
-please fun following commands in order in your terminal:
-<html> conda create --prefix ./env python==3.7.1 -y </html>
-<html> conda activate ./env/ </html>
-<html> pip install -r requirement.txt </html>
