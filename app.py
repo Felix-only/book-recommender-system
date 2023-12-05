@@ -141,7 +141,7 @@ if nav == 'Book Recommender':
     
 #visualization page
 if nav == 'Visualization':
-    tab1, tab2, tab3 = st.tabs(["Ratings & Age Distribution", "top rated books (with age)", "top rated books based on regions"])
+    tab1, tab2, tab3 = st.tabs(["Ratings & Age Distributions", "Top Rated Books (with Age)", "Top Rated Books (on regions)"])
 
     with tab1:
 
@@ -263,7 +263,7 @@ if nav == 'Visualization':
 
     with tab3:
 
-        st.header('Top rated books in specific regions')
+        st.header('Top rated books in regions')
 
         with open('py_objects/region_unique.pkl', 'rb') as file:
             region_unique = pickle.load(file)
