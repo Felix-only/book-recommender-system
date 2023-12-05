@@ -50,7 +50,19 @@ if nav == 'Home':
 
     # total count images
     st.text(' ')
-    st.header('')
+    st.subheader('Data Overview')
+    dic = {
+        'Books Counts': 271360,
+        'Users Counts': 278858,
+        'Rating Counts': 1149780
+    }
+    st.write(dic)
+    st.image('images/total_counts.png')
+
+    # GitHub Page
+    st.header(' ')
+    st.text('-------------------------------------------------------------------------------------------------------------------------------')
+    st.markdown("For Details of our project's source codes, check out our [GitHub Page!](https://github.com/Felix-only/book-recommender-system)")
    
 
 if nav == 'Book Recommender':
