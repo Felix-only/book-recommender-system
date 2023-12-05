@@ -141,14 +141,47 @@ if nav == 'Book Recommender':
     
 #visualization page
 if nav == 'Visualization':
-    st.header('Data Analysis')
+    st.header('Data Visualization')
     fig = plt.figure()
-    if st.button('book-rating'):
-        sns.histplot(ratings['Book-Rating'], kde=True)
+    st.text(' ')
+    st.markdown('**Chcek out the distribution of Data**')
+    st.text(' ')
+    if st.button('Distribution of Book Ratings'):
+        # Create a figure for Matplotlib
+        fig, ax = plt.subplots()
+
+        # Create the histogram with a log scale for the y-axis
+        sns.histplot(ratings['Book-Rating'], kde=False, bins=30, ax=ax)
+        ax.set_yscale('log')  # Sets a logarithmic scale on the y-axis
+        ax.set(xlabel='Book Rating', ylabel='Log Count')  # Labels the axes
+
+        # Adds a KDE plot on top of the histogram with the same x-axis
+        sns.kdeplot(ratings['Book-Rating'], ax=ax, color='red')
+
+        # Sets the title for the plot
+        ax.set_title('Distribution of Book Ratings')
+
+        # Display the plot in the Streamlit app
         st.pyplot(fig)
-    if st.button('Age'):
+
+    if st.button('Age Distribution of Users'):
+        # sns.histplot(users['Age'], kde=True)
+        # st.pyplot(fig)
+
+        # Create a figure for Matplotlib
+        fig, ax = plt.subplots()
+
+        # Create the histogram and KDE plot
         sns.histplot(users['Age'], kde=True)
+        ax.set_xlim(5, 80)  # Sets the x-axis limit from 5 to 80
+        ax.set_xlabel('Age')  # Sets the x-axis label
+        ax.set_ylabel('Count')  # Sets the y-axis label
+        ax.set_title('Age Distribution of Users')  # Sets the title of the plot
+
+        # Display the plot in the Streamlit app
         st.pyplot(fig)
+
+
     st.header('Top Rated books')
     # Count the number of ratings for each book
     book_rating_counts = ratings['ISBN'].value_counts().reset_index()
@@ -164,7 +197,7 @@ if nav == 'Visualization':
     # Set the aesthetic style of the plots
     sns.set_style("whitegrid")
 
-    num = st.slider('Top Books(with at least 50 ratings)', 0, 20, 5)
+    num = st.slider('Top Rated Books (with at least 50 ratings)', 0, 20, 5)
     # Top num rated books with 50+ ratings
     top_rated_books_50plus_df = ratings_books_50plus_df.groupby('Book-Title')['Book-Rating'].mean().reset_index()
     top_rated_books_50plus_df = top_rated_books_50plus_df.sort_values('Book-Rating', ascending=False).head(num)
@@ -184,7 +217,7 @@ if nav == 'Visualization':
     st.pyplot(fig)
 
 
-    age_young = st.slider('Top Books with the Youngest Average User Age (with at least 50 ratings)', 0, 20, 5)
+    age_young = st.slider('Top Rated Books with Younger Users (with at least 50 ratings)', 0, 20, 5)
 
     # Calculate the average age of users for each book with 50+ ratings
     ratings_books_users_50plus_df = pd.merge(ratings_books_50plus_df, users, on="User-ID")
@@ -208,7 +241,7 @@ if nav == 'Visualization':
     st.pyplot(fig2)
 
 
-    age_old = st.slider('Top Books with the Oldest Average User Age (with at least 50 ratings)', 0, 20, 5)
+    age_old = st.slider('Top Rated Books with Older Users (with at least 50 ratings)', 0, 20, 5)
     
     # Top books with the oldest average user age
     top_5_oldest_books_50plus_df = books_avg_age_50plus_df.sort_values('Age', ascending=False).head(age_old)
