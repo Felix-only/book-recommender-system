@@ -8,8 +8,9 @@ books = pd.read_csv('data/Books.csv')
 ratings = pd.read_csv('data/Ratings.csv')
 users = pd.read_csv('data/Users.csv')
 
-nav = st.sidebar.radio("Navigation", ['Home', 'Book Recommender'])
+nav = st.sidebar.radio("Navigation", ['Home', 'Book Recommender', 'Visualization'])
 
+# homepage
 if nav == 'Home':
     st.image('./images/book_recommender.png', width = 300)
     
@@ -64,7 +65,7 @@ if nav == 'Home':
     st.text('-------------------------------------------------------------------------------------------------------------------------------')
     st.markdown("For Details of our project's source codes, check out our [GitHub Page!](https://github.com/Felix-only/book-recommender-system)")
    
-
+#Recommendation page
 if nav == 'Book Recommender':
     st.header("Book Recommender")
     model = pickle.load(open('py_objects/model.pkl','rb'))
@@ -131,3 +132,7 @@ if nav == 'Book Recommender':
         with col5:
             st.text(recommendation_books[5])
             st.image(poster_url[5])
+    
+#visualization page
+if nav == 'Visualization':
+    st.header('Data Analysis')
