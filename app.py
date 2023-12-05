@@ -149,7 +149,7 @@ if nav == 'Visualization':
         st.text(' ')
         st.markdown('**Chcek out the distribution of Data**')
         st.text(' ')
-        if st.button('Distribution of Book Ratings'):
+        with st.container():
             # Create a figure for Matplotlib
             fig, ax = plt.subplots()
 
@@ -167,7 +167,9 @@ if nav == 'Visualization':
             # Display the plot in the Streamlit app
             st.pyplot(fig)
 
-        if st.button('Age Distribution of Users'):
+            st.header(' ')
+
+        with st.container():
             # Create a figure for Matplotlib
             fig, ax = plt.subplots()
 
