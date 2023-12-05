@@ -1,18 +1,53 @@
 import pickle
 import streamlit as st
 import numpy as np
+import pandas as pd
+
+# read csv in dataframe
+books = pd.read_csv('data/Books.csv')
+ratings = pd.read_csv('data/Ratings.csv')
+users = pd.read_csv('data/Users.csv')
 
 nav = st.sidebar.radio("Navigation", ['Home', 'Book Recommender'])
 
 if nav == 'Home':
-    st.title('My title')
     st.image('./images/book_recommender.png', width = 300)
     
     st.text(' ')
     st.text(' ')
-    st.text('Fixed width text')
-    st.code('''for i in range(8):
-    print('Hello World')''')
+    st.header('Project Overview')
+    st.text(' ')
+    st.markdown('''**Advanced Data Analytics:** 
+                This project harnesses big data analytics to extract meaningful insights from vast datasets. By analyzing purchasing patterns, 
+                browsing behaviors, and user interactions, it uncovers trends and preferences specific to the retailer's customer base.
+''')
+    st.markdown('''**Customized Recommendation Systems:** 
+                At the heart of the project is the development of a state-of-the-art recommendation system. Utilizing cosine similarity, 
+                the system will recommend books based on users' past behavior, preferences and reviews. 
+                This personalized approach ensures that customers find exactly what they are looking for, and even discover new books that align with their interests.
+''')
+    st.markdown('''**Visualization:** 
+                The project introduces an innovative approach to visualize customer profiles.
+                The purpose of visualization is to help companies better to understand how to better market their products.
+''')
+    st.text(' ')
+    st.header('Project Work Flow')
+    st.image('images/BigDataFlow.png')
+
+    st.text(' ')
+    st.header('Show samples of Data')
+    option = st.selectbox(
+        'Select a Data source',
+        ('books', 'ratings', 'users')
+    )
+
+    if option == 'books':
+        st.write(books.sample(5))
+    if option == 'ratings':
+        st.write(ratings.sample(5))
+    if option == 'users':
+        st.write(users.sample(5))
+   
 
 if nav == 'Book Recommender':
     st.header("Book Recommender")
