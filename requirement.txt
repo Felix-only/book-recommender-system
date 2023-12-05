@@ -4,5 +4,3 @@ scikit-learn
 matplotlib
 seaborn
 
-# local packages
--e . 

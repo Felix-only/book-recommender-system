@@ -68,10 +68,14 @@ if nav == 'Home':
 #Recommendation page
 if nav == 'Book Recommender':
     st.header("Book Recommender")
-    model = pickle.load(open('py_objects/model.pkl','rb'))
-    book_names = pickle.load(open('py_objects/books_name.pkl','rb'))
-    final_rating = pickle.load(open('py_objects/final_rating.pkl','rb'))
-    book_pivot = pickle.load(open('py_objects/pivot.pkl','rb'))
+    with open('py_objects/model.pkl', 'rb') as file:
+        model = pickle.load(file)
+    with open('py_objects/books_name.pkl', 'rb') as file:
+        book_names = pickle.load(file)
+
+    final_rating = pd.read_csv('py_objects/final_rating.csv', index_col=0)
+
+    book_pivot = pd.read_csv('py_objects/pivot.csv', index_col=0)
 
     selected_books = st.selectbox(
         "Type or select a book",
