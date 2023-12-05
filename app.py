@@ -47,6 +47,10 @@ if nav == 'Home':
         st.write(ratings.sample(5))
     if option == 'users':
         st.write(users.sample(5))
+
+    # total count images
+    st.text(' ')
+    st.header('')
    
 
 if nav == 'Book Recommender':
