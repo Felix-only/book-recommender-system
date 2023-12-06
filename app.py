@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # read csv in dataframe
-books = pd.read_csv('data/Books.csv')
-ratings = pd.read_csv('data/Ratings.csv')
-users = pd.read_csv('data/Users.csv')
 final_table = pd.read_csv('data/final_merge_table.csv')
 
 nav = st.sidebar.radio("Navigation", ['Home', 'Book Recommender', 'Visualization'])
@@ -37,20 +34,6 @@ if nav == 'Home':
     st.text(' ')
     st.header('Project Work Flow')
     st.image('images/BigDataFlow.png')
-
-    st.text(' ')
-    st.header('Show samples of Data')
-    option = st.selectbox(
-        'Select a Data source',
-        ('books', 'ratings', 'users')
-    )
-
-    if option == 'books':
-        st.write(books.sample(5))
-    if option == 'ratings':
-        st.write(ratings.sample(5))
-    if option == 'users':
-        st.write(users.sample(5))
 
     # total count images
     st.text(' ')
@@ -156,12 +139,12 @@ if nav == 'Visualization':
             fig, ax = plt.subplots()
 
             # Create the histogram with a log scale for the y-axis
-            sns.histplot(ratings['Book-Rating'], kde=False, bins=30, ax=ax)
+            sns.histplot(final_table['rating'], kde=False, bins=30, ax=ax)
             ax.set_yscale('log')  # Sets a logarithmic scale on the y-axis
             ax.set(xlabel='Book Rating', ylabel='Log Count')  # Labels the axes
 
             # Adds a KDE plot on top of the histogram with the same x-axis
-            sns.kdeplot(ratings['Book-Rating'], ax=ax, color='red')
+            sns.kdeplot(final_table['rating'], ax=ax, color='red')
 
             # Sets the title for the plot
             ax.set_title('Distribution of Book Ratings')
@@ -176,7 +159,7 @@ if nav == 'Visualization':
             fig, ax = plt.subplots()
 
             # Create the histogram and KDE plot
-            sns.histplot(users['Age'], kde=True)
+            sns.histplot(final_table['Age'], kde=True)
             ax.set_xlim(5, 80)  # Sets the x-axis limit from 5 to 80
             ax.set_xlabel('Age')  # Sets the x-axis label
             ax.set_ylabel('Count')  # Sets the y-axis label
@@ -221,16 +204,16 @@ if nav == 'Visualization':
         mean_age = ratings_books_50plus_df['Age'].mean()
         young_df = ratings_books_50plus_df[ratings_books_50plus_df['Age'] < mean_age]
 
-        books_avg_age_50plus_df = young_df.groupby('title')['rating'].mean().reset_index()
+        books_avg_age_50plus_df = young_df.groupby('title')[['Age','rating']].mean().reset_index()
 
         # Top books with the youngest average user age
         top_5_youngest_books_50plus_df = books_avg_age_50plus_df.sort_values('rating',ascending=False).head(age_young)
 
         # Visualization for Top Books with the Youngest Average User Age
         fig2 = plt.figure(figsize=(10, age_young + 1))
-        chart = sns.barplot(x='rating', y='title', data=top_5_youngest_books_50plus_df, palette='mako')
+        chart = sns.barplot(x='Age', y='title', data=top_5_youngest_books_50plus_df, palette='mako')
         plt.title('Top ' + str(age_young) + ' Books with the Youngest Average User Age (with at least 30 ratings)')
-    
+        plt.xlabel('Average Age')
         plt.ylabel('Book Title')
 
         # Adding the text on the bars
@@ -246,14 +229,14 @@ if nav == 'Visualization':
         # Top books with the oldest average user age
         old_df = ratings_books_50plus_df[ratings_books_50plus_df['Age'] >= mean_age]
 
-        books_avg_age_old_df = old_df.groupby('title')['rating'].mean().reset_index()
+        books_avg_age_old_df = old_df.groupby('title')[['Age','rating']].mean().reset_index()
         top_5_oldest_books_50plus_df = books_avg_age_old_df.sort_values('rating', ascending=False).head(age_old)
 
         # Visualization for Top Books with the Oldest Average User Age
         fig3 = plt.figure(figsize=(10, age_old + 1))
-        chart = sns.barplot(x='rating', y='title', data=top_5_oldest_books_50plus_df, palette='copper')
+        chart = sns.barplot(x='Age', y='title', data=top_5_oldest_books_50plus_df, palette='copper')
         plt.title('Top ' + str(age_old) + ' Books with the Oldest Average User Age (with at least 30 ratings)')
-        
+        plt.xlabel('Average Age')
         plt.ylabel('Book Title')
 
         # Adding the text on the bars
