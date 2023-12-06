@@ -11,4 +11,4 @@ Please run following commands in order in your terminal:
 ```bash
   $ pip install -r requirement.txt
 ```
-## data preprocessing & model generating
+### Chcek out the demo of the project: [Collaborative Filtering Recommender APP](https://recommender-system-bigdata.streamlit.app/)
