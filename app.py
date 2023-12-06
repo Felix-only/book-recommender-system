@@ -142,6 +142,7 @@ if nav == 'Book Recommender':
     
 #visualization page
 if nav == 'Visualization':
+
     tab1, tab2, tab3 = st.tabs(["Ratings & Age Distributions", "Top Rated Books (with Age)", "Top Rated Books (on regions)"])
 
     with tab1:
@@ -186,30 +187,33 @@ if nav == 'Visualization':
 
     with tab2:
 
+        # ratings_books_50plus_df = pd.read_csv('../data/final_rating.csv', index_col=0).reset_index().drop(columns=['index'])
+        ratings_books_50plus_df = final_table.copy()
+
         st.header('Top Rated books')
-        # Count the number of ratings for each book
-        book_rating_counts = ratings['ISBN'].value_counts().reset_index()
-        book_rating_counts.columns = ['ISBN', 'Rating-Count']
+        # # Count the number of ratings for each book
+        # book_rating_counts = ratings['ISBN'].value_counts().reset_index()
+        # book_rating_counts.columns = ['ISBN', 'Rating-Count']
 
-        # Filter for books with 50 or more ratings
-        books_with_50plus_ratings = book_rating_counts[book_rating_counts['Rating-Count'] >= 50]
+        # # Filter for books with 50 or more ratings
+        # books_with_50plus_ratings = book_rating_counts[book_rating_counts['Rating-Count'] >= 50]
 
-        # Merge this filtered dataset with the original ratings and then with the books dataset
-        ratings_50plus_df = pd.merge(books_with_50plus_ratings, ratings, on="ISBN")
-        ratings_books_50plus_df = pd.merge(ratings_50plus_df, books, on="ISBN")
+        # # Merge this filtered dataset with the original ratings and then with the books dataset
+        # ratings_50plus_df = pd.merge(books_with_50plus_ratings, ratings, on="ISBN")
+        # ratings_books_50plus_df = pd.merge(ratings_50plus_df, books, on="ISBN")
 
         # Set the aesthetic style of the plots
         sns.set_style("whitegrid")
 
-        num = st.slider('Top Rated Books (with at least 50 ratings)', 0, 20, 5)
-        # Top num rated books with 50+ ratings
-        top_rated_books_50plus_df = ratings_books_50plus_df.groupby('Book-Title')['Book-Rating'].mean().reset_index()
-        top_rated_books_50plus_df = top_rated_books_50plus_df.sort_values('Book-Rating', ascending=False).head(num)
+        num = st.slider('Top Rated Books (with at least 30 ratings)', 0, 20, 5)
+        # Top num rated books with 30+ ratings
+        top_rated_books_50plus_df = ratings_books_50plus_df.groupby('title')['rating'].mean().reset_index()
+        top_rated_books_50plus_df = top_rated_books_50plus_df.sort_values('rating', ascending=False).head(num)
 
         # Visualization for Top num Rated Books and Their Ratings
         fig = plt.figure(figsize=(10, num + 1))
-        chart = sns.barplot(x='Book-Rating', y='Book-Title', data=top_rated_books_50plus_df, palette='coolwarm')
-        plt.title('Top '+ str(num) + ' Rated Books (with at least 50 ratings)')
+        chart = sns.barplot(x='rating', y='title', data=top_rated_books_50plus_df, palette='coolwarm')
+        plt.title('Top '+ str(num) + ' Rated Books (with at least 30 ratings)')
         plt.xlabel('Average Rating')
         plt.ylabel('Book Title')
 
@@ -221,20 +225,23 @@ if nav == 'Visualization':
         st.pyplot(fig)
 
 
-        age_young = st.slider('Top Rated Books with Younger Users (with at least 50 ratings)', 0, 20, 5)
+        age_young = st.slider('Top Rated Books with Younger Users (with at least 30 ratings)', 0, 20, 5)
 
-        # Calculate the average age of users for each book with 50+ ratings
-        ratings_books_users_50plus_df = pd.merge(ratings_books_50plus_df, users, on="User-ID")
-        books_avg_age_50plus_df = ratings_books_users_50plus_df.groupby('Book-Title')['Age'].mean().reset_index()
+        # Calculate the average age of users for each book with 30+ ratings
+        # ratings_books_users_50plus_df = pd.merge(ratings_books_50plus_df, users, on="User-ID")
+        mean_age = ratings_books_50plus_df['Age'].mean()
+        young_df = ratings_books_50plus_df[ratings_books_50plus_df['Age'] < mean_age]
+
+        books_avg_age_50plus_df = young_df.groupby('title')['rating'].mean().reset_index()
 
         # Top books with the youngest average user age
-        top_5_youngest_books_50plus_df = books_avg_age_50plus_df.sort_values('Age').head(age_young)
+        top_5_youngest_books_50plus_df = books_avg_age_50plus_df.sort_values('rating',ascending=False).head(age_young)
 
         # Visualization for Top Books with the Youngest Average User Age
         fig2 = plt.figure(figsize=(10, age_young + 1))
-        chart = sns.barplot(x='Age', y='Book-Title', data=top_5_youngest_books_50plus_df, palette='mako')
-        plt.title('Top ' + str(age_young) + ' Books with the Youngest Average User Age (with at least 50 ratings)')
-        plt.xlabel('Average Age of Users')
+        chart = sns.barplot(x='rating', y='title', data=top_5_youngest_books_50plus_df, palette='mako')
+        plt.title('Top ' + str(age_young) + ' Books with the Youngest Average User Age (with at least 30 ratings)')
+    
         plt.ylabel('Book Title')
 
         # Adding the text on the bars
@@ -245,16 +252,19 @@ if nav == 'Visualization':
         st.pyplot(fig2)
 
 
-        age_old = st.slider('Top Rated Books with Older Users (with at least 50 ratings)', 0, 20, 5)
+        age_old = st.slider('Top Rated Books with Older Users (with at least 30 ratings)', 0, 20, 5)
         
         # Top books with the oldest average user age
-        top_5_oldest_books_50plus_df = books_avg_age_50plus_df.sort_values('Age', ascending=False).head(age_old)
+        old_df = ratings_books_50plus_df[ratings_books_50plus_df['Age'] >= mean_age]
+
+        books_avg_age_old_df = old_df.groupby('title')['rating'].mean().reset_index()
+        top_5_oldest_books_50plus_df = books_avg_age_old_df.sort_values('rating', ascending=False).head(age_old)
 
         # Visualization for Top Books with the Oldest Average User Age
         fig3 = plt.figure(figsize=(10, age_old + 1))
-        chart = sns.barplot(x='Age', y='Book-Title', data=top_5_oldest_books_50plus_df, palette='copper')
-        plt.title('Top ' + str(age_old) + ' Books with the Oldest Average User Age (with at least 50 ratings)')
-        plt.xlabel('Average Age of Users')
+        chart = sns.barplot(x='rating', y='title', data=top_5_oldest_books_50plus_df, palette='copper')
+        plt.title('Top ' + str(age_old) + ' Books with the Oldest Average User Age (with at least 30 ratings)')
+        
         plt.ylabel('Book Title')
 
         # Adding the text on the bars
