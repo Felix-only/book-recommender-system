@@ -191,16 +191,6 @@ if nav == 'Visualization':
         ratings_books_50plus_df = final_table.copy()
 
         st.header('Top Rated books')
-        # # Count the number of ratings for each book
-        # book_rating_counts = ratings['ISBN'].value_counts().reset_index()
-        # book_rating_counts.columns = ['ISBN', 'Rating-Count']
-
-        # # Filter for books with 50 or more ratings
-        # books_with_50plus_ratings = book_rating_counts[book_rating_counts['Rating-Count'] >= 50]
-
-        # # Merge this filtered dataset with the original ratings and then with the books dataset
-        # ratings_50plus_df = pd.merge(books_with_50plus_ratings, ratings, on="ISBN")
-        # ratings_books_50plus_df = pd.merge(ratings_50plus_df, books, on="ISBN")
 
         # Set the aesthetic style of the plots
         sns.set_style("whitegrid")
@@ -228,7 +218,6 @@ if nav == 'Visualization':
         age_young = st.slider('Top Rated Books with Younger Users (with at least 30 ratings)', 0, 20, 5)
 
         # Calculate the average age of users for each book with 30+ ratings
-        # ratings_books_users_50plus_df = pd.merge(ratings_books_50plus_df, users, on="User-ID")
         mean_age = ratings_books_50plus_df['Age'].mean()
         young_df = ratings_books_50plus_df[ratings_books_50plus_df['Age'] < mean_age]
 
@@ -289,15 +278,6 @@ if nav == 'Visualization':
         num_top = st.slider('please select the number of books', 0, 10, 5)
 
         ratings_books_us = final_table[final_table['country'] == selected_region]
-
-        # # Filter users from the US and the UK
-        # users_us = users[users['Location'].str.contains(selected_region, case=False, na=False)]
-
-        # # Merge the filtered users with the ratings
-        # ratings_us = pd.merge(users_us, ratings, on="User-ID")
-
-        # # Merge this with the books data
-        # ratings_books_us = pd.merge(ratings_us, books, on="ISBN")
 
         # Count the number of ratings for each book in the US and the UK
         book_rating_counts_us = ratings_books_us['ISBN'].value_counts().reset_index()
