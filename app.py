@@ -263,19 +263,15 @@ if nav == 'Visualization':
         ratings_books_us = final_table[final_table['country'] == selected_region]
 
         # Count the number of ratings for each book in the US and the UK
-        book_rating_counts_us = ratings_books_us['ISBN'].value_counts().reset_index()
-        book_rating_counts_us.columns = ['ISBN', 'Rating-Count']
-
-        # Merge this filtered dataset with the original ratings and then with the books dataset
-        ratings_books_50plus_us = pd.merge(book_rating_counts_us, ratings_books_us, on="ISBN")
+        book_rating_counts_us = ratings_books_us.groupby('title')['rating'].mean().reset_index()
+        book_rating_counts_us.columns = ['title', 'avg_rating']
 
         # Top rated books in the US and the UK with 50+ ratings
-        top_rated_books_50plus_us = ratings_books_50plus_us.groupby('title')['rating'].mean().reset_index()
-        top_rated_books_50plus_us = top_rated_books_50plus_us.sort_values('rating', ascending=False).head(num_top)
+        top_rated_books_50plus_us = book_rating_counts_us.sort_values(['avg_rating'], ascending=False).head(num_top)
 
         # Visualization for Top Rated Books in the US and the UK with 50+ ratings
         fig4 = plt.figure(figsize=(10, num_top + 1))
-        chart = sns.barplot(x='rating', y='title', data=top_rated_books_50plus_us, palette='coolwarm')
+        chart = sns.barplot(x='avg_rating', y='title', data=top_rated_books_50plus_us, palette='coolwarm')
         plt.title('Top ' + str(num_top) + ' Rated Books in the ' + str(selected_region))
         plt.xlabel('Average Rating')
         plt.ylabel('Book Title')
